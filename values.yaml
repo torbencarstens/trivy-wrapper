@@ -1,0 +1,27 @@
+rbacBaseName: &rbacBaseName trivy-read-only
+
+cronjob:
+  image: torbencarstens/trivy-wrapper
+  imagePullPolicy: Always
+  schedule: "0 0 * * *"
+  backoffLimit: 0
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  restartPolicy: Never
+  command: python
+  args:
+    - "main.py"
+  labels:
+    app: trivy-wrapper
+  requests:
+    cpu: 1
+    memory: 100Mi
+
+serviceaccount:
+  name: *rbacBaseName
+
+clusterrole:
+  name: *rbacBaseName
+
+clusterrolebinding:
+  name: *rbacBaseName
